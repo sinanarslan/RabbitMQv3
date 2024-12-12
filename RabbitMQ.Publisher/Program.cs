@@ -9,6 +9,8 @@ internal class Program
 {
     private static async Task Main(string[] args)
     {
+
+        // FANOUT EXCHANGE ÖRNEĞİ
         ConnectionFactory factory = new ConnectionFactory();
         factory.HostName = "localhost";
         factory.Port = 5672;
