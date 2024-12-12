@@ -23,14 +23,28 @@ internal class Program
         using IConnection con = await factory.CreateConnectionAsync();// connection oluştur
         using IChannel channel = await con.CreateChannelAsync();   // rabbitmq ya bir kanal oluştur
 
-       await channel.BasicQosAsync(0, 1, false); // Her bir subscribe 5 er 5 er gönder  //  true yaparsak tüm subscriberlar için 5 adet olacak şekilde böl demiş oluyoruz.
-        
+        var randomqueuename = channel.QueueDeclareAsync().Result.QueueName;
 
 
-        //    channel.QueueDeclareAsync("RabbitMQSinan", true, false, false); // silinebilir de. Eminsek kuyruk olduğunda
+        // Subcriber gittiğinde kuyrukta gitmesini için Queebinde kullandık:
+        await channel.QueueBindAsync(randomqueuename, "fanoutexchange_log", "", null);
+
+       
+
+
+        await channel.BasicQosAsync(0, 1, false); // Her bir subscribe 5 er 5 er gönder  //  true yaparsak tüm subscriberlar için 5 adet olacak şekilde böl demiş oluyoruz.
+
+  
+
+       
+        //channel.QueueDeclareAsync("RabbitMQSinan", true, false, false); // silinebilir de. Eminsek kuyruk olduğunda
+
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.ReceivedAsync += Consumer_ReceivedAsync;
-        await channel.BasicConsumeAsync("RabbitMQSinan", autoAck: false, consumer: consumer); //autoAck: Bunu false yaparsak işlem bitince biz sil diyebileceğiz
+
+        await channel.BasicConsumeAsync(randomqueuename, autoAck: false, consumer: consumer); //autoAck: Bunu false yaparsak işlem bitince biz sil diyebileceğiz
+
+        Console.WriteLine("Dinliyoruz...");
         Console.ReadLine();
 
     }
@@ -47,7 +61,8 @@ internal class Program
         ((AsyncEventingBasicConsumer)sender).Channel.BasicAckAsync(@event.DeliveryTag, false); // Hangi tagla buraya gelmişse. O taglı kuyruğu sil, false ise Diğerlerini silsin mi, hayır
 
 
-
+        /// UNUTMA TEST İÇİN ÖNCE CONSUMERLARI OLUŞTUR Kİ KUYRUKLAR OLUŞSUN..SONRA PUBLISHERI ÇALIŞTIR.
+        /// dotnet run (csproj klasöründe)
 
         return Task.CompletedTask;
     }
