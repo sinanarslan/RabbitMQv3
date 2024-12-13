@@ -27,6 +27,7 @@ internal class Program
 
 
 
+
         //!!! excahge oluşturmayı da publisher yaparken bazı durumlarda  Kuyruk oluşturmayı  consumer da yapabilir. Ancak bu durum istisna ve dikkatli olmak lazım.
         // Fanout Exchange kendisine bağlı olan tüm kuyruklara aynı mesajı iletir.
         // Kaç tane consumer bağlanacağını bilmediğimiz durumlarda burada kullanıcılara kendi kuyruklarınızı oluşturup hava durumlarını çekebilirsiniz. Biz saate bir Fanout exchange ile bir kanal oluşturuyoruz buradan isteyen alsın diyebilirsin.
