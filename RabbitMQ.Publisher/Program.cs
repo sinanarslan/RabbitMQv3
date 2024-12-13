@@ -10,7 +10,15 @@ internal class Program
     private static async Task Main(string[] args)
     {
 
+
+
+
         // FANOUT EXCHANGE ÖRNEĞİ
+
+        // TÜM CONSUMER LARA AYNI DATA GÖNDERİLİR
+        // YANİ YÜK DAĞITILMAZ: TÜM CONSUMERLAR AYNI YÜKÜ ALIR
+
+
         ConnectionFactory factory = new ConnectionFactory();
         factory.HostName = "localhost";
         factory.Port = 5672;
